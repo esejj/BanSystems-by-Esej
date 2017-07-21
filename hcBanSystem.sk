@@ -3,11 +3,6 @@
 # hcBanSystem
 # system banowania
 
-options:
-
-	# powod bana
-	reason-ban: &4Umarles! &cOtrzymales bana permanentnego
-
 command /esej:hcbansystem [<text>] [<player>]:
 	description: System banowania.
 	permission: esej.hcbansystem
