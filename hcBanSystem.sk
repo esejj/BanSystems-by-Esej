@@ -9,7 +9,7 @@ command /esej:hcbansystem [<text>] [<player>]:
 	permission message: &8» &cYou don't have permission &8(&3esej.hcbansystem&8)
 	aliases: /hcbansystem, /hcbans, /hcban,
 	trigger:
-		if argument 1 is "szanse":
+		if argument 1 is "szansy":
 			if player-argument is set:
 				set {_player} to player-argument
 			else:
