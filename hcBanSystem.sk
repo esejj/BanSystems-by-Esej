@@ -1,0 +1,64 @@
+# Skrypt made by eseJ
+# version: 0.1
+# hcBanSystem
+# system banowania
+
+options:
+
+	# powod bana
+	reason-ban: &4Umarles! &cOtrzymales bana permanentnego
+
+command /esej:hcbansystem [<text>] [<player>]:
+	description: System banowania.
+	permission: esej.hcbansystem
+	permission message: &8» &cYou don't have permission &8(&3esej.hcbansystem&8)
+	aliases: /hcbansystem, /hcbans, /hcban,
+	trigger:
+		if argument 1 is "szanse":
+			if player-argument is set:
+				set {_player} to player-argument
+			else:
+				set {_player} to player
+			send "&8» &c&m------------&8 «" to the player
+			send "&8» &7Gracz: &3%{_player}%" to the player
+			send "&8» &7Szanse: &e%{eBans::szansy::%{_player}%}%" to the player
+			stop
+		if argument 1 is "unban":
+			if player-argument is set:
+				make console execute command "unban %player-argument%"
+				send "&8» &7Gracz &c%player-argument% &7zostal &3odbanowany" to the player-argument
+				stop
+			else:
+				send "&8» &cNie podales nicku gracza" to the player
+		if argument 1 is "dajszanse":
+			if player-argument is set:
+				add 1 to {eBans::szansy::%player-argument%}
+				send "&8» &7Dodano &ejedna &6szanse &7graczowi &3%player-argument%" to the player
+				stop
+			else:
+				send "&8» &cKomu ja mam dodac te szanse co?" to the player
+				send "&8» &4Ehh&7... &cnie podales nicku gracza" to the player
+				stop
+		if argument 1 is "autor" or "author":
+			send "&8» &cAutorem tego slabego skryptu jest: &9esej" to the player
+			stop
+on join:
+	if {eBans::szanse::%player%} isn't set:
+		set {eBans::status::%player%} to true
+		if player has permission "eBans.vip":
+			add 3 to {eBans::szansy::%player%}
+		if player has permission "eBans.svip":
+			add 5 to {eBans::szansy::%player%}
+		if player has permission "eBans.ranga":
+			add 10 to {eBans::szansy::%player%}
+		if player has permission "eBans.unlimited":
+			set {eBans::status::%player%} to false
+			send "&8» &eeBans &8«" to the player
+			send "&8» &7Jako, iz masz uprawnienie &6eBans.unlimited &7otrzymujesz &3przywilej &9nielimitowanych &czyc" to the player
+on death of player:
+	if {eBans::status::%victim%} is true:
+		if {eBans::szansy::%victim%} > 0:
+			kick player due to "&8» &c-1 szansa%nl%&8» &czostales zabity%nl%&8» &7Twoje szansy: &3%{eBans::szanse"
+		else:
+			ban player due to "&8» &cStraciles swoje wszystkie szansy.%nl%&8» &4Niestety! &cban permanenty."
+	stop
