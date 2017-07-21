@@ -1,0 +1,21 @@
+# System - 1 ( po smierci ban czasowy z configiem w pliku .yml)
+
+on load:
+	if folder "plugins/eBans" doens't exists:
+		create folder "plugins/eBans"
+		create file "plugins/eBans/config.yml"
+		wl "// Ile ma trwac ban po smierci?" to "plugins/eBans/config.yml"
+		wl "ban-time: '5'" to "plugins/eBans/config.yml"
+		wl "// jednostka czasu" to "plugins/eBans/config.yml"
+		wl "unit-time: 'minute'" to "plugins/eBans/config.yml"
+		wl "// Powod bana :D" to "plugins/eBans/config.yml"
+		wl "ban-reason: '§4Umarles! §cMasz bana na §7%{czas-bana}%" to "plugins/eBans/config.yml"
+	set {czas-bana} to single value "ban-time" get of "plugins/eBans/config.yml"
+	set {powod-bana} to single value "ban-reason" get of "plugins/eBans/config.yml"
+	set {jednostka-czasu} to single value "unit-time" get of "plugins/eBans/config.yml"
+on death of player:
+	set {eBans::ban::timer::%victim%} to {czas-bana}
+	set {eBans::ban::reason::%victim%} to {powod-bana}
+	ban player due to "%{eBans::ban::reason::%victim%}%"
+	wait {eBans::ban::timer::%victim%} {jednostka-czasu}
+	execute command "unban %victim%"
